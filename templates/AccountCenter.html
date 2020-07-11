@@ -1,0 +1,19 @@
+{% extends "templates.html" %}
+
+{% block title %}
+账户中心
+{% endblock %}
+{% block css_js %}
+    <link rel="stylesheet" href="/static/css/account.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    <div id="subject">
+        <p>飞翔主题酒店</p>
+        <a href="password"><button id="change_psw">修改密码</button></a><br />
+{#        <a href=""><button id="feedback">意见反馈</button></a><br />#}
+        <a href="user/logout"><button id="logout">退出登录</button></a>
+    </div>
+{% endblock %}

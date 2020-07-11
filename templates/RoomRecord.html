@@ -1,0 +1,219 @@
+{% extends "templates.html" %}
+{% block title %}
+    查询界面
+{% endblock %}
+{% block css_js %}
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/static/css/roomRecord.css">
+{% endblock %}
+{% block main %}
+    <div id="subject">
+				<span id="how" >
+					<span id ="alltype">查询方式：
+						<input id="type1" type="button" value="姓名"/>
+						<input id="type2" type="button" value="入住时间"/>
+						<input id="type3" type="button" value="房间号"/>
+						<input id="type4" type="button" value="性别"/>
+					</span>
+					<span class="checktype" style="display: none;">
+
+                            <input type="text" name="record_text" id="get_text" placeholder="请输入..."/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="button" class="sub_button" value="搜索"/>
+                            <input type="button" class="back"  value="返回" />
+                            <input type="text" style="display: none">
+
+
+					</span>
+					<span class="checktype" style="display: none; ">
+
+                            年：<select name="year" id="year">
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                </select>
+                            月：<select name="month" id="month">
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                </select>
+                            日：<select name="day" id="day"></select>
+
+                            <input type="button" class="sub_button"  value="搜索" />
+                            <input type="button" class="back"  value="返回" />
+                            <input type="text" style="display: none" id="get_daytime">
+
+					</span>
+					<span class="checktype" style="font-size: 20px; display: none;">
+
+						<label><input type="radio" name="sex" class="get_sex" value="男" checked="checked" /> 男</label>
+						<label><input type="radio" name="sex" class="get_sex" value="女" />女</label>
+
+						<input type="button" class="sub_button"  value="搜索" />
+                            <input type="button" class="back"  value="返回" />
+                        <input type="text" style="display: none">
+
+					</span>
+
+				</span>
+				<table id="news" border="" cellspacing="0" cellpadding="0" align="center">
+					<tr id="first_tr"><th>姓名</th><th>性别</th><th>身份证号</th><th>入住时间</th><th>退房时间</th><th>房间号</th></tr>
+{#					<tr>#}
+{#						<td>离一动</td>#}
+{#						<td>男</td>#}
+{#						<td>412723199703107755</td>#}
+{#						<td>2019.03.11</td>#}
+{#						<td>2019.03.12</td>#}
+{#						<td>359</td>#}
+{##}
+{#					</tr>#}
+				</table>
+			</div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+	$(function(){
+        var record_type = "";
+	    {#选择查询方式#}
+		$("#type1").click(function(){
+		    record_type = "";
+			$(this).parent().css("display","none");
+			$(".checktype").first().css("display", "block");
+            record_type = "name";
+		});
+		$("#type3").click(function(){
+		    record_type = "";
+			$(this).parent().css("display","none");
+			$(this).parent().next().css("display", "block");
+            record_type = "room_num"
+		});
+		$("#type2").click(function(){
+		    record_type = "";
+			$(this).parent().css("display","none");
+			$(this).parent().next().next().css("display", "block");
+            record_type = "live_time"
+		});
+		$("#type4").click(function(){
+		    record_type = "";
+			$(this).parent().css("display","none");
+			$(this).parent().next().next().next().css("display", "block");
+            record_type = "sex"
+		});
+		{#返回按钮#}
+        $(".back").click(function(){
+            $(this).parent().css("display", "none");
+            $("#alltype").css("display", "block");
+            $(this).next().val("");
+            $(this).prev()
+        });
+
+		{#生成对应天数的option标签#}
+		function dayhtml(num){
+
+		    var dayhtml = "";
+		    dayhtml += `<option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>`;
+
+            for (let i=10;i < num -9;i++){
+                dayhtml += `<option value="`+i+`">`+i+`</option>`
+            }
+            return dayhtml
+        }
+        {#闰年运算#}
+        function leap_year(year){
+            if (year % 4 === 0 && year %100 !== 0){
+                return true
+            }else{
+                return false
+            }
+        }
+        {#使日选择默认为31天#}
+        $("#day").html(dayhtml(31));
+        $("#get_daytime").val($("#year").val()+'.'+$("#month").val()+'.'+$("#day").val());
+        {#根据年份及月份改变天数#}
+        $("#month, #year").change(function(){
+            {#获取月份#}
+            var tag = $("#month").val();
+            {#判断月份，生成相应天数#}
+            if (tag === "1" || tag === "3" || tag ==="5" || tag === "7" || tag === "8" || tag === "10" || tag === "12"){
+                $("#day").html(dayhtml(31))
+            }else if(tag === "2"){
+                if (leap_year($("#year").val())){
+                     $("#day").html(dayhtml(29))
+                }else {
+                    $("#day").html(dayhtml(28))
+                }
+            }else{
+                $("#day").html(dayhtml(30))
+            }
+        });
+        {#年月日改变时，修改input标签value#}
+        $("#day,#month, #year").change(function(){
+            $("#get_daytime").val($("#year").val()+'-'+$("#month").val()+'-'+$("#day").val());
+        });
+         $("#get_text").change(function(){
+            $(this).nextAll("input").last().val($(this).val());
+        });
+        {#获取性别#}
+        $(".get_sex").parents("span").children("input").last().val($(".get_sex").val())
+         $(".get_sex").click(function(){
+             $(this).parents("span").children("input").last().val($(this).val())
+        }) ;
+
+        {#搜索按钮绑定动作#}
+        $(".sub_button").click(function(){
+            let record_text = $(this).next().next().val();
+            $.ajax({
+                url:"customer_msg/customer_record",
+                data:{"record_text": record_text, "record_type": record_type},
+                type:"post",
+                success:function(data){
+                    data = JSON.parse(data);
+                    {#在下次点击时删除上次查询的信息#}
+                    $("#first_tr").nextAll().remove();
+                    if (data[data.length - 1]["status"] === 200)
+                    {
+                        data.pop(data.length - 1);
+                        for (let i=0;i<data.length;i++){
+                            $("#news").append(
+                                `<tr>
+                                <td>`+data[i]["name"]+`</td>
+                                <td>`+data[i]["sex"]+`</td>
+                                <td>`+data[i]["id_card"]+`</td>
+                                <td>`+data[i]["live_time"]+`</td>
+                                <td>`+data[i]["check_out_time"]+`</td>
+                                <td>`+data[i]["room_num"]+`</td>
+                                </tr>`
+
+                            )
+                        }
+                    }else{
+                        alert(data[data.length - 1]["msg"])
+                    }
+
+                }
+
+
+
+
+            })
+        });
+	})
+</script>
+{% endblock %}

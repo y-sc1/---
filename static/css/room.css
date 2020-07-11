@@ -1,0 +1,156 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+#box{
+	width: 100%;
+	height: 700px;
+	border: 5px solid black;
+}
+#lbox{
+    border: 5px solid black;
+    width: 200px;
+    height: 500px;
+    text-align: center;
+    line-height: 50px;
+    margin-left: 20px;
+    margin-top: 20px;
+    float: left;
+    overflow: scroll;
+
+}
+#lbox>ul>input{
+    border: none;
+    background-color: blanchedalmond;
+    width: 100%;
+    height: 50px;
+    border-radius: 0;
+}
+
+ul>li{
+    display: none;
+}
+#rbox{
+    width: 70%;
+    height: 500px;
+    border: 5px solid black;
+    float: right;
+    margin-top: 20px;
+    margin-right: 10%;
+    position: relative;
+}
+#rbox>div{
+    position: absolute;
+    font-size: 30px;
+    margin-left: 20px;
+    top: 50px;
+    line-height: 50px;
+
+}
+
+#lbox::-webkit-scrollbar {
+    display: none;
+}
+#rbox>input{
+    width: 150px;
+    height: 75px;
+    border-radius: 10px;
+    font-size: 25px;
+    position: absolute;
+}
+#rbox>input:hover{
+    background-color: red;
+    color: white;
+    transform: scale(1.2);
+    transition: ease 0.5s;
+
+}
+#rbox>input:first-of-type{
+    bottom: 20px;
+    left: 20px;
+
+}
+#rbox>input:last-of-type{
+    bottom: 20px;
+    right: 20px;
+}
+span{
+    color: #FF0000;
+}
+#cpm{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    /* overflow: auto; */
+    border: 5px solid black;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    }
+#cpm_count{
+    background-color: #FFEBCD;
+    margin: 15% auto;
+    /* padding: 20px; */
+    border: 1px solid #888;
+    width: 400px;
+    height: 300px;
+    position: relative;
+    font-size: 30px;
+
+}
+#cpm p{
+    position: absolute;
+
+}
+
+#cpm p>input{
+    height: 30px;
+}
+#cpm p:first-of-type{
+    top: 10px;
+    left: 10px;
+}
+#cpm p:nth-of-type(3){
+    top: 90px;
+    left: 10px;
+    }
+#cpm p:nth-of-type(5){
+    top: 170px;
+    left: 10px;
+    }
+#t1{
+    display: none;
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    }
+#t2{
+    display: none;
+    position: absolute;
+    left: 10px;
+    top: 130px;
+    }
+#close{
+    text-decoration: none;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    font-size: 28px;
+}
+#sure{
+    text-decoration: none;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-size: 28px;
+}
+button:hover{
+    background-color: red;
+    color: white;
+    transform: scale(1.2);
+    transition: ease 1s;
+}

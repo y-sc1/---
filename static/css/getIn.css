@@ -1,0 +1,43 @@
+td{
+	width: 50px;
+
+}
+#box{
+	width: 100%;
+	height: 700px;
+	border: 5px solid black;
+}
+td input[type=text]{
+	border: none;
+	text-align: center;
+	/*左右居中*/
+	vertical-align: middle;
+}
+th{
+	width: 100px;
+}
+#mybody{
+	position: relative;
+	width: 100%;
+	height: 600px;
+}
+#mybody>table{
+	position: absolute;
+	top: 100px;
+	left: 35%;
+}
+#mybody>input[type=button]{
+	position: absolute;
+	bottom: 100px;
+	left: 50%;
+	font-size: 25px;
+	width: 150px;
+	height: 50px;
+	border-radius: 10px;
+}
+#mybody>input[type=button]:hover{
+	background-color: red;
+	color: white;
+	transform: scale(1.2);
+	transition: ease 0.5s;
+}

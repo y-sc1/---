@@ -1,0 +1,154 @@
+{% extends "templates.html" %}
+{% block title %}
+    房间信息
+{% endblock %}
+{% block css_js %}
+    <link rel="stylesheet" href="/static/css/room.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+{% endblock %}
+{% block main %}
+    <div id="lbox">
+
+        <ul>
+        {% for k, v in number_dict.items %}
+            <input type="button" name="" id="" value={{ k}}   />
+            {% for fuu in room_msg %}
+                {% if v in fuu.room_num %}
+
+                    <li><a class="room" href="javascript:void(0)">{{ fuu.room_num }}</a></li>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    </div>
+
+    <div id="rbox">
+        <div id = "rrbox">
+            {# 动态加载房间信息区块#}
+        </div>
+
+    </div>
+{#    退房弹窗#}
+    <div id="cpm">
+        <div id="cpm_count">
+            <form action="customer_msg/check_out" method="post">
+                <p>是否有消费
+                <input type="radio" id="p1" name="money" value="是" >是
+                <input type="radio" name="money" id="p1_1" value="无" checked="checked">否</p>
+                <input type="text" name="room_num" id="out_room_num" style="display: none">
+                <p id="t1">消费金额：<input type="text"  name="consume" value="无"></p>
+                <p>屋内设施是否有损坏
+                <input type="radio" id="p2" name="damage" value="是" >是
+                <input type="radio" id = "p2_2"name="damage" value="无" checked="checked">否</p>
+                <p id="t2">损坏设备：<input type="text" name="damage_text" value="无"></p>
+                <p>押金是否退还
+                <input type="radio" name="deposit" value="已退还" >是
+                <input type="radio" name="deposit" value="未退还" checked="checked">否</p>
+                <button id="sure">确定</button><button id="close">关闭</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+
+	$(function(){
+	    {#    左侧房间列表下拉效果  #}
+		$("ul>input").click(function(){
+			var tag = $(this).nextUntil("input")
+			if(tag.css("display") == "none"){
+				// 判断li标签是否隐藏
+			tag.slideDown("slow", function(){
+				// js动画,缓慢下拉
+				tag.css("display", "block")
+			})
+			}else{
+				tag.slideUp("slow", function(){
+					// js动画,缓慢上拉
+					tag.css("display", "none")
+				})
+			}
+		})
+        {#为每个房间号绑定动作#}
+        $(".room").click(function(){
+
+            $.ajax({
+                url:"query/"+ $(this).text(),
+                async:false,
+                type:"post",
+                success:function(data){
+                     {#将房间信息展示在页面上，删除页面全部信息，防止叠加#}
+                     $("#rrbox").html();
+                     $("#rrbox").nextAll("input").remove();
+                    data=JSON.parse(data);
+                    {#在页面动态加载信息#}
+                    $("#rrbox").html(`<p id="room_num" style="display: inline-block;">房间号：`+data["room_num"]+`</p>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<p style="display: inline-block;">房间类型：`+data["room_type"]+`</p>
+					<p>客房电话：`+data["house_tel"]+`</p>
+					<p>提供设备：<span>`+data["room_appliance"]+`</span></p>`);
+                    {#判断是否有住户#}
+                    if(data["islive"] === "是"){
+                        $("#rrbox").append(`<p>押金金额：<span>`+data["deposit"]+`</span></p>
+                                    <p style="display: inline-block;">入住人数：`+data["peo_num"]+`</p>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p style="display: inline-block;">入住时间：`+data["live_time"]+`</p>
+                                    <p>住户：`+data["live_people"]+`</p>`);
+                       $("#rrbox").after(`
+                            <input type="button" id="check_out" value="退房"/>`)
+                    }else{
+                         $("#rrbox").after(`<input type="button" id="check_in" value="办理入住"/>`)
+                    }
+                    {#办理入住绑定点击动作#}
+                    $("#check_in").click(function(){
+                        var room_num = $("#room_num").text().split("：")[1];
+                        window.location.href = "getin/" + room_num
+                    });
+                 {#退房弹窗#}
+                $("#check_out").click(function(){
+                    $("#out_room_num").val($("#room_num").text().split("：")[1]);
+                    $("#cpm").css("display", "block")
+                });
+                {#关闭按钮绑定动作#}
+                $("#close").click(function(){
+                    $(this).parent().submit(false);
+                    $("#cpm").css("display", "none");
+
+
+                });
+                {#$("#sure").click(function(){#}
+                {#   $(this).submit()#}
+                {# }); #}
+                $("#p1").change(function(){
+                    if($(this)[0].checked){
+                    $("#t1").css("display", "block")
+                    }
+                });
+                $("#p1_1").change(function(){
+                    if($(this)[0].checked){
+                    $("#t1").css("display", "none")
+                    }
+                });
+                $("#p2").change(function(){
+                    if($(this)[0].checked){
+
+                    $("#t2").css("display", "block")
+                    }
+                });
+                $("#p2_2").change(function(){
+                    if($(this)[0].checked){
+
+                    $("#t2").css("display", "none")
+                    }
+                })
+
+
+                }
+            })
+
+        });
+
+	})
+</script>
+{% endblock %}
+

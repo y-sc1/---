@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<link rel="stylesheet" href="/static/css/login.css">
+        <script src="/static/js/jquery-3.4.1.min.js"></script>
+	</head>
+	<body>
+		<div class="header">
+			<h1>新世纪酒店管理系统</h1>
+		</div>
+		<div class="box">
+			<form action="index" id="form_data" method="post">
+               <p>
+				<label>用户名</label>
+				<input type="text" id="username" placeholder="电话/邮箱"/>
+				<br>
+				<b style="font-size: 2px;color: #FF0000;"></b>
+			</p>
+			<p>
+				<label>密码</label>
+				<input type="password" id="password" placeholder="请输入密码" />
+				<br>
+				<b style="font-size: 2px;color: #FF0000;"></b>
+			</p>
+			<p id="b1"><a href="forget_pwd">忘记密码</a></p>
+			<p><input type="submit" id="login"   value="登录"/></p>
+			</form>
+		</div>
+	</body>
+</html>
+<script>
+    $(function(){
+        $("#username, #password").focusout(function(){
+            if ($(this).val() === "") {
+                $(this).next().next().html("不可为空");
+                $("#login").attr("disabled", true)
+            }else{
+                $(this).next().next().html(" ");
+                $("#login").attr("disabled", false)
+            }
+    });
+
+        {#登录按钮绑定动作，异步验证账号密码正确性#}
+        $("#login").click(function(){
+            var username = $("#username").val();
+            var password = $("#password").val();
+            $.ajax({
+                url: "user/user",
+                data: {"username":username, "password": password},
+                async: false,
+                type: "post",
+                success:function(data){
+                    data = JSON.parse(data);
+                    if (data["status"] === "200") {
+                        alert("登录成功");
+                        $("#form_data").submit()
+                    }else{
+                        alert("账户或密码错误");
+                        $("#form_data").submit(false)
+                    }
+
+                },
+                error(){
+                    alert("服务器错误，请稍后重试")
+                     $("#form_data").submit(false)
+                }
+
+                 });
+             })
+
+    })
+
+
+
+
+
+
+</script>

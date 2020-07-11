@@ -1,0 +1,23 @@
+{% extends "templates.html" %}
+{% load static %}
+{% block title %}主页{% endblock %}
+
+{% block css_js %}
+<link rel="stylesheet" href='{% static "css/index.css" %}'>
+{% endblock %}
+
+
+{% block main %}
+<form action="room" method="post">
+    <div id="subject">
+
+        <input type="text" id=inp1 name="record_text" placeholder="请输入..."/>
+        <input type="submit" id="inp2" value="搜索" />
+
+    </div>
+    </form>
+{% endblock %}
+{% block js %}
+    <script>
+    </script>
+{% endblock %}

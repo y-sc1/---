@@ -1,0 +1,95 @@
+{%extends "templates.html"%}
+{% load static %}
+{% block title %}
+    办理入住
+{% endblock %}
+{% block css_js %}
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/getIn.css' %}">
+{% endblock %}
+{% block main %}
+
+    <div id="mybody">
+        <table border="" cellspacing="0" cellpadding="0" style="text-align: center;">
+            <tr><th>姓名</th><th>性别</th><th>身份证号</th><th>押金</th><th>入住人数</th></tr>
+            <tr class='onetr'>
+                <td><input type='text'  name='name'/></td>
+                <td><select name='sex'>
+                    <option value='男'>男</option>
+                    <option value='女'>女</option>
+                </select></td>
+                <td><input type='text' name='id_card' value=""/></td>
+                <td><input type='text' name='deposit' value=""/></td>
+                <td><select name='peoplenumber' id="pnum">
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                </select></td>
+            </tr>
+
+        </table>
+        <input type="button"  id="get_in" value="确认入住" />
+    </div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+	$(function(){
+	    {# 监听人数选择 #}
+	    $("#pnum").change(function(){
+	        {# 删除全部的信息表格 #}
+	        $(this).parents("tr").nextAll().remove();
+            let a = Number($(this).val());
+            let i = 1;
+            {# 循环创建人数所需信息表格 #}
+            for (i;i < a;i++){
+                $(this).parents("tr").after(`<tr class='onetr'>
+                                                <td><input type='text' name='name'/></td>
+                                                <td><select name='sex'>
+                                                    <option value='男'>男</option>
+                                                    <option value='女'>女</option></select></td>
+                                                <td><input type='text' name='id_card'/></td>
+                                                <td><input type='text' name='deposit'/></td></tr>`)
+            }
+        });
+	   $("#get_in").click(function(){
+	       var tag = $(".onetr");
+	       var data = new Array();
+           var dict_msg ={};
+           {#做入住人数次遍历#}
+	       for (let i= 0;i < tag.length;i++){
+	           {#做信息个数次遍历#}
+	           for (let j= 0; j< tag[i].cells.length;j++){
+	               {#获取td内标签的标签名#}
+	               let localname = tag[i].cells[j].firstChild.localName;
+	               {# 获取标签名对应的值#}
+	               {#console.log(tag[i].cells[j].getElementsByTagName(localname)[0].value)#}
+                   {# 获取标签名对应的name属性#}
+                   {# console.log(tag[i].cells[j].getElementsByTagName(localname)[0].name)#}
+                    dict_msg[tag[i].cells[j].getElementsByTagName(localname)[0].name] = tag[i].cells[j].getElementsByTagName(localname)[0].value
+	           }
+               data.push(dict_msg);
+               dict_msg = {}
+           }
+	       {#获取办理入住的房间号#}
+	       var room_num = window.location.href.split("/")[window.location.href.split("/").length-1];
+	       room_num = {"room_num": room_num};
+	       data.push(room_num);
+	       $.ajax({
+               url:"message",
+               data: {"data":data},
+               type:"post",
+               success:function(msg){
+                   msg = JSON.parse(msg);
+                   if (msg["status"] === 200){
+                        alert(msg["msg"]);
+                       top.location.href = "index";
+                   }else{
+                       alert(msg["msg"])
+                   }
+               }
+           });
+       })
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+#subject{
+
+	font-size: 50px;
+	position: relative;
+}
+#subject>p{
+
+	position: absolute;
+	top: 50px;
+	left: 40%;
+}
+#subject>a>button{
+
+	height: 70px;
+	font-size: 50px;
+	background-color: darkgray;
+	border:1px solid black;
+	position: absolute;
+}
+
+#change_psw{
+	width: 280px;
+	top: 150px;
+	left: 41%;
+}
+#feedback{
+	width: 280px;
+	top: 250px;
+	left: 41%;
+}
+#logout{
+
+	width: 250px;
+	color: red;
+	font-size: 40px;
+	top: 350px;
+	left: 42%;
+}
+#box{
+	width: 100%;
+	height: 700px;
+	border: 5px solid black;
+}
+#subject>a>button:hover{
+	color: white;
+	opacity: 0.3;
+	background: #FF0000;
+	transform: scale(1.2);
+	transition:ease 0.5s;
+}
